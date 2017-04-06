@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/xuther/websocket-exploration/handlers"
+	"github.com/xuther/websocket-exploration/helpers"
 )
 
 func main() {
@@ -18,5 +19,8 @@ func main() {
 		Addr:           port,
 		MaxHeaderBytes: 1024 * 10,
 	}
+	go helpers.Manager.Start()
+
 	router.StartServer(&server)
+
 }

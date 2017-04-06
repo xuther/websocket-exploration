@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -15,8 +16,9 @@ func Openws(context echo.Context) error {
 func WriteMessage(context echo.Context) error {
 	event := helpers.Event{}
 	err := context.Bind(&event)
+	log.Printf("%+v", event)
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, "Bad event")
+		return context.JSON(http.StatusBadRequest, "Bad event"+err.Error())
 	}
 
 	return helpers.WriteMessage(event)

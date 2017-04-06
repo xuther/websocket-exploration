@@ -17,12 +17,11 @@ export class SocketService {
             this.listener.emit({"type": "close", "data": event});
         }
 
-        this.socket.onclose = event => {
-            this.listener.emit({"type": "close", "data": event});
-        }
-
         this.socket.onmessage = event => {
-            this.listener.emit({"type": "message", "data": JSON.parse(event.data)});
+            console.log("Message recieved");
+            console.log(event);
+            console.log("yo");
+            this.listener.emit({"type": "message", "data": event});
         } 
     }
   
