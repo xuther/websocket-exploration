@@ -133,8 +133,6 @@ func (sc *SaltConnection) ListenForEvents(eventChan chan<- helpers.EventWrapper)
 					log.Fatal(err)
 				}
 				if strings.Contains(line2, "data") {
-					log.Printf("Event Receieved")
-					log.Printf("%s", line2)
 					jsonString := line2[5:]
 					event := helpers.EventWrapper{}
 
