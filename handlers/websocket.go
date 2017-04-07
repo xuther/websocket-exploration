@@ -14,7 +14,7 @@ func Openws(context echo.Context) error {
 }
 
 func WriteMessage(context echo.Context) error {
-	event := helpers.Event{}
+	event := helpers.EventWrapper{}
 	err := context.Bind(&event)
 	log.Printf("%+v", event)
 	if err != nil {

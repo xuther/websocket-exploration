@@ -14,6 +14,8 @@ func main() {
 
 	router.GET("/ws", handlers.Openws)
 	router.POST("/event", handlers.WriteMessage)
+	router.GET("/login", handlers.Login)
+	router.GET("/listen", handlers.Listen)
 
 	server := http.Server{
 		Addr:           port,

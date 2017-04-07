@@ -10,7 +10,7 @@ import (
 
 type ClientManager struct {
 	clients    map[*Client]bool
-	broadcast  chan Event
+	Broadcast  chan EventWrapper
 	register   chan *Client
 	unregister chan *Client
 }
@@ -20,16 +20,20 @@ type Client struct {
 	send   chan []byte
 }
 
+type EventWrapper struct {
+	Tag  string `json:"tag,omitempty"`
+	Data Event  `json:"data,omitempty"`
+}
+
 type Event struct {
 	Data      interface{} `json:"data,omitempty"`
 	ID        string      `json:"id,omitempty"`
-	Type      string      `json:"type,omitempty"`
 	TimeStamp string      `json:"_stamp,omitempty"`
 }
 
 //manager to be used globally.
 var Manager = &ClientManager{
-	broadcast:  make(chan Event, 100),
+	Broadcast:  make(chan EventWrapper, 100),
 	register:   make(chan *Client),
 	unregister: make(chan *Client),
 	clients:    make(map[*Client]bool),
@@ -50,7 +54,7 @@ func (manager *ClientManager) Start() {
 				close(conn.send)
 				delete(manager.clients, conn)
 			}
-		case event := <-manager.broadcast:
+		case event := <-manager.Broadcast:
 			log.Printf("Sending event %s", event)
 			//Marshal once
 			toSend, err := json.Marshal(&event)
@@ -104,8 +108,8 @@ func StartWebClient(res http.ResponseWriter, req *http.Request) {
 	go client.write()
 }
 
-func WriteMessage(event Event) error {
-	log.Printf("Sending Message to broadcast")
-	Manager.broadcast <- event
+func WriteMessage(event EventWrapper) error {
+	log.Printf("Sending Message to Broadcast")
+	Manager.Broadcast <- event
 	return nil
 }
